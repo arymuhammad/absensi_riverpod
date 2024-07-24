@@ -1,0 +1,44 @@
+name: absensi_riverpod
+description: "Absensi App with riverpod"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  cached_network_image: ^3.3.1
+  convex_bottom_bar: ^3.2.0
+  crypto: ^3.0.3
+  cupertino_icons: ^1.0.6
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  fluttertoast: ^8.2.6
+  fpdart: ^1.1.0
+  go_router: ^14.2.1
+  http: ^1.2.2
+  shared_preferences: ^2.2.3
+  icons_plus: 5.0.0
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets: 
+    - assets/image/
+  fonts: 
+    - family: Nunito
+      fonts: 
+        - asset: assets/fonts/Nunito-Black.ttf
+        - asset: assets/fonts/Nunito-BlackItalic.ttf
+        - asset: assets/fonts/Nunito-Bold.ttf
+        - asset: assets/fonts/Nunito-BoldItalic.ttf
+        - asset: assets/fonts/Nunito-Italic.ttf
+        - asset: assets/fonts/Nunito-Light.ttf
+        - asset: assets/fonts/Nunito-LightItalic.ttf
+        - asset: assets/fonts/Nunito-Medium.ttf
+        - asset: assets/fonts/Nunito-Regular.ttf
+  uses-material-design: true
