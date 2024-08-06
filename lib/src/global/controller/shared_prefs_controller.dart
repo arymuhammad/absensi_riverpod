@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../model/login_model.dart';
 import '../../model/user.dart';
 import '../repository/shared_prefs_repo.dart';
 
@@ -22,12 +23,20 @@ class SharedPrefsController {
     await _repo.setCookie(cookie);
   }
 
-  Future<User?> getUser() async {
+  Future<Data?> getUser() async {
     return _repo.getCurrentUser();
   }
 
-  Future<void> setUser({required User user}) async {
+  Future<void> setUser({required Data user}) async {
     _repo.setCurrentUser(user);
+  }
+  
+  Future<void> setAuth(bool status) async {
+    _repo.isAuth(status: status);
+  }
+  
+  Future<bool?> getAuth() async {
+    return  _repo.getAuth();
   }
 
   Future<void> clear() async {

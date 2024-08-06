@@ -15,6 +15,9 @@ class CsCacheNetImg extends StatelessWidget {
         value: progress.progress,
         strokeWidth: 15,
       ),
+      errorWidget: (context, url, error) {
+        return Image.network("ade");
+      },
     );
   }
 }

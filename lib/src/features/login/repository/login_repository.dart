@@ -14,8 +14,7 @@ class LoginAuth {
   final name = "Login auth";
   LoginAuth({required NetworkRepo api}) : _api = api;
 
-  FutureEither<Login> login(String? username, String? password) async {
-    var data = {"username": username, "password": password};
+  FutureEither<Login> login(Map<String, dynamic>? data) async {
     final result = await _api.postRequest(
         url: EndPoints.login, body: data, requireAuth: false);
     return result.fold(
@@ -26,13 +25,14 @@ class LoginAuth {
       (Response response) {
         try {
           final data = jsonDecode(response.body);
-          final productJson = data['data'];
-          // log(productJson.toString(), name: name);
+          final productJson = data;
+          log(productJson.toString(), name: name);
           // Login loginData;
           // for (dynamic data in productJson) {
           // log(data.toString(), name: name);
           Login loginData = Login.fromJson(productJson);
           // }
+
           return Right(loginData);
         } catch (e, stktrc) {
           log(FailureMessage.jsonParsingFailed, name: name);

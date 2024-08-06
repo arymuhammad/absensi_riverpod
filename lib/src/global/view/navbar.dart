@@ -1,5 +1,8 @@
+import 'package:absensi_riverpod/src/features/attendande/view/attendance_view.dart';
+import 'package:absensi_riverpod/src/features/history/view/history.dart';
 import 'package:absensi_riverpod/src/features/home/view/home.dart';
 import 'package:absensi_riverpod/src/features/profile/view/profile.dart';
+import 'package:absensi_riverpod/src/features/settings/view/settings.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,18 +31,19 @@ class NavBar extends ConsumerWidget {
         style: TabStyle.fixedCircle,
         backgroundColor: Colors.blue,
         onTap: (i) {
-          // if (i == 1) {
-          //   ref.read(navBarRepoProvider.notifier).selectedNav(i);
-          //   // loc.isLoading.value = true;
-          //   // loc.searchDate.value = "";
-          //   // listDataUser![12]=="1"? loc.getAllVisited(listDataUser![0]): loc.getAllAbsen(listDataUser![0]);
-          // } else if (i == 2) {
-          //   loginC.selectedMenu(i);
-          //   loc.getLoc(listDataUser);
-          // } else {
-          //   loginC.selectedMenu(i);
-          // }
-          ref.read(navBarRepoProvider.notifier).selectedNav(i);
+          if (i == 1) {
+            ref.read(navBarRepoProvider.notifier).selectedNav(i);
+            // loc.isLoading.value = true;
+            // loc.searchDate.value = "";
+            // listDataUser![12]=="1"? loc.getAllVisited(listDataUser![0]): loc.getAllAbsen(listDataUser![0]);
+          } else if (i == 2) {
+            ref.read(navBarRepoProvider.notifier).selectedNav(i);
+            // loginC.selectedMenu(i);
+            // loc.getLoc(listDataUser);
+          } else {
+            ref.read(navBarRepoProvider.notifier).selectedNav(i);
+          }
+          // ref.read(navBarRepoProvider.notifier).selectedNav(i);
         },
       ),
     );
@@ -47,9 +51,14 @@ class NavBar extends ConsumerWidget {
 }
 
 final List<Widget> widgetList = <Widget>[
-  Home(),
-  // listDataUser![12]=="1"? RiwayatVisitView(userData:listDataUser!): SemuaAbsenView(data: listDataUser!),
-  // AbsenView(data: listDataUser!),
-  // SettingsView(listDataUser: listDataUser!),
-  Profile()
+  const Home(),
+  // // listDataUser![12]=="1"? RiwayatVisitView(userData:listDataUser!): SemuaAbsenView(data: listDataUser!),
+  // // AbsenView(data: listDataUser!),
+  // // SettingsView(listDataUser: listDataUser!),
+  // Settings(),
+  const History(),
+  const AttendanceView(),
+  const Settings(),
+  // Settings(),
+  const Profile()
 ];

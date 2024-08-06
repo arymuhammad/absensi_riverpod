@@ -5,10 +5,11 @@ abstract class RoutesPath {
   RoutesPath._();
   static const splash = '/splash';
   // static const addPegawai = '/add-pegawai';
-  static const login = '/login';
-  static const navbar = '/navbar';
   static const home = '/home';
-  static const profile = '/profile';
+  static const login = '/login';
+  static const navbar = '/';
+  static const profile = 'profile';
+  static const stock = 'cekstock';
   // static const LOGIN = '/login';
   // static const PROFIL = '/profil';
   // static const DETAIL_ABSEN = '/detail-absen';

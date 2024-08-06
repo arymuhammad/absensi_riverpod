@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as rnd;
+import 'package:absensi_riverpod/src/model/login_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +14,7 @@ final sharedPrefsRepoProvider =
 class SharedPrefsRepo {
   final String _tokenKey = "COOKIE_TOKEN";
   final String _currentUserKey = "CURRENT_USER";
+  final String _isAuth = "IS_AUTH";
   final _name = "SHARED_PREFS_REPO";
   final String characters =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_+';
@@ -33,24 +35,44 @@ class SharedPrefsRepo {
     return cookie;
   }
 
-  Future<User?> getCurrentUser() async {
+  Future<Data?> getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final data = prefs.getString(_currentUserKey);
     if (!AppConfig.devMode) {
       log("Reading user", name: _name);
       log("Data : $data", name: _name);
     }
-    final user = data != null ? User.fromJson(jsonDecode(data)) : null;
+    final user = data != null ? Data.fromJson(jsonDecode(data)) : null;
     return user;
   }
 
-  Future<void> setCurrentUser(User user) async {
+  Future<void> setCurrentUser(Data user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (AppConfig.devMode) {
       log("Saving user", name: _name);
       log("Data : ${user.toJson()}", name: _name);
     }
     prefs.setString(_currentUserKey, jsonEncode(user.toJson()));
+  }
+
+  Future<void> isAuth({bool status = false}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (AppConfig.devMode) {
+      log("Saving auth", name: _isAuth);
+      log("Data : $status", name: _isAuth);
+    }
+    prefs.setBool(_isAuth, status);
+  }
+
+  Future<bool?> getAuth() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final data = prefs.getBool(_isAuth);
+    if (!AppConfig.devMode) {
+      log("Reading auth", name: _isAuth);
+      log("Data : $data", name: _isAuth);
+    }
+    // final user = data != null ? User.fromJson(jsonDecode(data)) : null;
+    return data;
   }
 
   Future<void> setCookie(String cookie) async {
@@ -64,6 +86,6 @@ class SharedPrefsRepo {
 
   Future<void> clear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    await prefs.clear();
   }
 }

@@ -1,19 +1,34 @@
+import 'dart:convert';
+import 'package:absensi_riverpod/core/config/base_path.dart';
+import 'package:absensi_riverpod/src/features/home/provider/home_provider.dart';
+import 'package:absensi_riverpod/src/features/home/view/header_section.dart';
+import 'package:absensi_riverpod/src/features/home/view/date_time_section.dart';
+import 'package:absensi_riverpod/src/features/profile/view/profile.dart';
 import 'package:absensi_riverpod/src/global/controller/shared_prefs_controller.dart';
+import 'package:absensi_riverpod/src/global/providers/common_providers.dart';
+import 'package:absensi_riverpod/src/global/repository/shared_prefs_repo.dart';
+import 'package:absensi_riverpod/src/model/login_model.dart';
+import 'package:absensi_riverpod/src/shared/alert_dialog.dart';
+import 'package:absensi_riverpod/src/shared/awesome_dialog.dart';
 import 'package:absensi_riverpod/src/shared/icon_button.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../global/controller/init_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../../shared/cache_network_image.dart';
 import '../../../shared/clip_header_background.dart';
+import '../../login/view/login.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(sharedPrefsControllerPovider);
+    final auth = ref.read(sharedPrefsControllerPovider);
+    final userData = ref.read(currentUserProvider);
     return Scaffold(
       body: Stack(
         children: [
@@ -24,7 +39,7 @@ class Home extends ConsumerWidget {
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/image/bgapp.jpg'),
+                      image: AssetImage('${BasePaths.baseImagePath}/bgapp.jpg'),
                       fit: BoxFit.fill)),
             ),
           ),
@@ -41,7 +56,9 @@ class Home extends ConsumerWidget {
                           onTap: () {
                             // Get.to(
                             //     () => ProfilView(listDataUser: listDataUser!));
-                            context.go(RoutesPath.profile);
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => Profile()));
+                            context.goNamed(RoutesPath.profile);
                           },
                           child: Card(
                             elevation: 4,
@@ -57,16 +74,15 @@ class Home extends ConsumerWidget {
                                   height: 80,
                                   width: 80,
                                   color: Colors.grey[200],
-                                  child: 
-                                  
-                                  // listDataUser![5] != ""
-                                      // ? 
-                                      CsCacheNetImg(url: '',)
-                                      // :
-                                      //  Image.network(
-                                      //     "",
-                                      //     fit: BoxFit.cover,
-                                      //   ),
+                                  child: userData!.foto != ""
+                                      ? CsCacheNetImg(
+                                          url:
+                                              '${BasePaths.baseProdUrl}/${userData.foto!}',
+                                        )
+                                      : Image.network(
+                                          "https://ui-avatars.com/api/?name=${userData.nama!}",
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                             ),
@@ -82,7 +98,7 @@ class Home extends ConsumerWidget {
                                   TextStyle(fontSize: 18, color: Colors.white),
                             ),
                             Text(
-                              "ade",
+                              userData.nama!,
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.white),
                             ),
@@ -92,8 +108,32 @@ class Home extends ConsumerWidget {
                     ),
                     IconButton(
                         onPressed: () {
-                          auth.clear();
-                          context.go(RoutesPath.login);
+                          CsAwesomeDialog.showAlert(
+                              title: 'Information',
+                              body: 'Anda yakin ingin keluar?',
+                              onCancel: () {},
+                              onOk: () {
+                                auth.clear();
+                                context.go(RoutesPath.login);
+                                // Navigator.of(context).pushReplacement(
+                                //     MaterialPageRoute(
+                                //         builder: (context) => LoginView()));
+                                ref.read(loggedInProvider.notifier).state =
+                                    false;
+                              },
+                              context: context,
+                              dialogType: DialogType.question);
+                          // AlertService.showAlert(
+                          //     title: 'Information',
+                          //     body: 'Anda yakin ingin keluar?',
+                          //     onCancel: () {},
+                          //     onOk: () {},
+                          //     context: context);
+                          // auth.setAuth(false);
+                          // auth.clear();
+                          // context.go(RoutesPath.login);
+                          // ref.read(loggedInProvider.notifier).state = false;
+
                           // promptDialog(context, 'Anda yakin ingin keluar?');
                         },
                         icon: const Icon(
@@ -108,10 +148,8 @@ class Home extends ConsumerWidget {
                     flex: 1,
                     child: Column(
                       children: [
-                        // CardInfoMenu(userData: listDataUser!),
-                        // listDataUser![12] == "1"
-                        //     ? SummaryAbsenArea(userData: listDataUser!)
-                        //     : SummaryAbsen(userData: listDataUser!)
+                        const HeaderSection(),
+                        DateTimeSection(),
                       ],
                     )),
               ],
